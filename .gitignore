@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.next/
+build/
+.env
+*.log
+.DS_Store
+coverage/
+nginx/generated/

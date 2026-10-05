@@ -1,0 +1,22 @@
+# Per-service compose. Joins the shared external vaayu_db network.
+# Run:  docker compose -f compose.yaml up -d --build
+# DB URIs: inside docker the defaults point at the `mongo`/`postgres`
+# containers on vaayu_db. Local brew dev uses 127.0.0.1 from .env (no auth).
+name: vaayu-seo-api
+
+services:
+  seo-api:
+    build: .
+    image: seo-api:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/app_seo-api}
+      PG_URI: ${PG_URI:-postgres://postgres:postgres@postgres:5432/app_seo-api}
+    ports:
+      - "3400:3400"
+    networks: [vaayu_db]
+
+networks:
+  vaayu_db:
+    external: true

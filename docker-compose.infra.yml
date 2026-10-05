@@ -1,0 +1,59 @@
+# LOCAL ONLY infrastructure: MongoDB + MinIO on the shared `vaayu_db` network.
+# On the VPS these already run on vaayu_db, so do NOT start this file there —
+# just run docker-compose.yml, which joins the existing network.
+#
+# Start (local, once):  docker compose -f docker-compose.infra.yml up -d
+name: vaayu-db
+
+services:
+  mongo:
+    image: mongo:8
+    container_name: vaayu-mongo
+    restart: unless-stopped
+    command: ["mongod", "--bind_ip_all"]
+    volumes:
+      - mongo_data:/data/db
+    # No host port published — apps reach it as `mongo:27017` on vaayu_db.
+    # Avoids clashing with a local brew mongod on 127.0.0.1.
+    networks:
+      - vaayu_db
+
+  mongo-express:
+    image: mongo-express:1-0-18
+    container_name: vaayu-mongo-express
+    restart: unless-stopped
+    depends_on: [mongo]
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: "27017"
+      ME_CONFIG_BASICAUTH_USERNAME: ${DB_UI_USER:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${DB_UI_PASSWORD:?set DB_UI_PASSWORD in .env}
+    ports:
+      - "8081:8081"
+    networks:
+      - vaayu_db
+
+  minio:
+    image: minio/minio:latest
+    container_name: vaayu-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in .env}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    networks:
+      - vaayu_db
+
+volumes:
+  mongo_data:
+  minio_data:
+
+networks:
+  vaayu_db:
+    name: vaayu_db
+    driver: bridge

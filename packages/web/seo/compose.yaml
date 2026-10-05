@@ -1,0 +1,17 @@
+# Per-app compose. Joins the shared external vaayu_db network.
+# Run:  docker compose -f compose.yaml up -d --build
+name: vaayu-seo
+
+services:
+  seo:
+    build: .
+    image: seo:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3001:3000"
+    networks: [vaayu_db]
+
+networks:
+  vaayu_db:
+    external: true

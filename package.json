@@ -1,0 +1,24 @@
+{
+  "name": "vaayu-seo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm -r --if-present --parallel dev",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "infra": "docker compose -f docker-compose.infra.yml up -d",
+    "up": "docker compose up -d --build",
+    "nginx:gen": "tsx nginx-setup.ts",
+    "nginx:setup": "bash vps/nginx/setup-nginx.sh",
+    "deploy": "bash deploy.sh"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
