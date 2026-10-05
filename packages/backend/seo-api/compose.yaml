@@ -14,7 +14,8 @@ services:
       MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/app_seo-api}
       PG_URI: ${PG_URI:-postgres://postgres:postgres@postgres:5432/app_seo-api}
     ports:
-      - "3400:3400"
+      # Host 3401 (3400 is taken by vaayu-api-core) -> container 3400.
+      - "3401:3400"
     networks: [vaayu_db]
 
 networks:

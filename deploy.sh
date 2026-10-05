@@ -14,7 +14,9 @@ REMOTE_DIR="/var/www/seo.vaayulabs.com"
 WEB_DOMAIN="seo.vaayulabs.com"
 API_DOMAIN="seo-api.vaayulabs.com"
 WEB_PORT="3001"
+# Container port (app listens here) vs host port (3400 taken by vaayu-api-core).
 API_PORT="3400"
+API_HOST_PORT="3401"
 
 REPO="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO"
@@ -64,7 +66,7 @@ ssh "$SSH_HOST" "cd ${REMOTE_DIR} && docker compose up -d --build"
 
 echo "▶ Checking health..."
 sleep 5
-ssh "$SSH_HOST" "curl -sf http://localhost:${API_PORT}/health && echo ' -> seo-api healthy' || echo '  api health check failed'"
+ssh "$SSH_HOST" "curl -sf http://localhost:${API_HOST_PORT}/health && echo ' -> seo-api healthy' || echo '  api health check failed'"
 
 echo "▶ Setting up nginx + SSL..."
 ssh "$SSH_HOST" "cd ${REMOTE_DIR} && sudo bash vps/setup-nginx.sh 2>&1" || {
