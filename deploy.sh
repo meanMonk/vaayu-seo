@@ -13,7 +13,7 @@ SSH_HOST="contabo"
 REMOTE_DIR="/var/www/seo.vaayulabs.com"
 WEB_DOMAIN="seo.vaayulabs.com"
 API_DOMAIN="seo-api.vaayulabs.com"
-WEB_PORT="3001"
+WEB_PORT="3002"
 # Container port (app listens here) vs host port (3400 taken by vaayu-api-core).
 API_PORT="3400"
 API_HOST_PORT="3401"

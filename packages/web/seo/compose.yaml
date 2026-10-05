@@ -9,7 +9,8 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - "3001:3000"
+      # Host 3002 (3001 is taken by a host process) -> container 3000.
+      - "3002:3000"
     networks: [vaayu_db]
 
 networks:

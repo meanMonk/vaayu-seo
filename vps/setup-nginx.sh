@@ -7,7 +7,7 @@
 set -euo pipefail
 
 # domain:port pairs (VPS host ports; 3400 is taken by vaayu-api-core)
-SITES="seo.vaayulabs.com:3001 seo-api.vaayulabs.com:3401"
+SITES="seo.vaayulabs.com:3002 seo-api.vaayulabs.com:3401"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WEBROOT="/var/www/certbot"
