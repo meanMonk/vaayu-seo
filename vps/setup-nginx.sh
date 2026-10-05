@@ -37,6 +37,13 @@ for pair in $SITES; do
   sed "s/{{PORT}}/${PORT}/g" "$CONF_SRC" > "$CONF_DEST"
   ln -sf "$CONF_DEST" "/etc/nginx/sites-enabled/${DOMAIN}.conf"
 
+  # A previous run may have left a 1-day temporary self-signed cert (certbot
+  # failed back then). Detect it by issuer and re-issue a real cert.
+  if [ -f "$CERT_PATH" ] && ! openssl x509 -in "$CERT_PATH" -noout -issuer 2>/dev/null | grep -qi "let's encrypt"; then
+    echo "  temporary self-signed cert found for $DOMAIN — will re-issue"
+    rm -rf "/etc/letsencrypt/live/${DOMAIN}" "/etc/letsencrypt/archive/${DOMAIN}" "/etc/letsencrypt/renewal/${DOMAIN}.conf"
+  fi
+
   if [ ! -f "$CERT_PATH" ]; then
     # First-time SSL: nginx -t would fail on the missing cert, so issue a
     # throwaway self-signed cert at the exact letsencrypt paths. This lets nginx
