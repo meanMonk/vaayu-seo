@@ -38,7 +38,6 @@ rsync -avz \
   --exclude '.DS_Store' --exclude '*.log' \
   --exclude 'dist' \
   --exclude '.env' --exclude '.env.prod' --exclude '.env.example' \
-  --exclude 'tsconfig.json' \
   ./ "${SSH_HOST}:${REMOTE_DIR}/"
 
 echo "▶ Syncing nginx confs separately..."
