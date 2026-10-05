@@ -1,10 +1,11 @@
 FROM node:22-alpine
-RUN corepack enable
 
 WORKDIR /app
 COPY package.json ./
-RUN pnpm install
+# npm (not pnpm): runs postinstall scripts non-interactively on any version.
+# (Corepack pulls latest pnpm, which hard-blocks esbuild builds in Docker.)
+RUN npm install --no-audit --no-fund
 COPY . .
 
 EXPOSE 3400
-CMD ["pnpm", "exec", "tsx", "src/index.ts"]
+CMD ["npx", "tsx", "src/index.ts"]
