@@ -1,8 +1,21 @@
 {
-  "extends": "../../../tsconfig.base.json",
+  // Self-contained (no "extends"): the Docker build only copies this package,
+  // so ../../../tsconfig.base.json doesn't exist inside the image.
+  // Keep in sync with tsconfig.base.json at the repo root.
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
     "types": []
   },
   "include": ["src"]
